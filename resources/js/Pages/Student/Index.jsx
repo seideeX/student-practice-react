@@ -28,9 +28,16 @@ export default function Index({students, queryParams = null}) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Student
-                </h2>
+                <div className='flex justify-between items-center'>
+                    <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                        Student
+                    </h2>
+                    <Link className='bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded shadow transition-all'
+                    href={route('student.create')}>
+                        Add Project
+                    </Link>
+                </div>
+
             }
         >
             <Head title="Student Page" />
@@ -59,7 +66,7 @@ export default function Index({students, queryParams = null}) {
                                                 placeholder="Search by name"
                                                 defaultValue={queryParams.name}
                                                 onBlur={e => searchFieldName('name', e.target.value)}
-                                                onKeyPress={e => onKeyPressed = ('name', e)}
+                                                onKeyPress={e => onKeyPressed('name', e)}
                                             />
                                         </th>
                                         <th className="px-3 py-2"></th>

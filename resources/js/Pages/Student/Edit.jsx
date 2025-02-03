@@ -6,25 +6,26 @@ import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Create({}){
+export default function Edit({student}){
     const {data, setData, post, errors} = useForm({
-        name: '',
-        program: '',
-        address: '',
-        specialization: '',
-        year: ''
+        name: student.name || '',
+        program: student.program || '',
+        address: student.address || '',
+        specialization: student.specialization || '',
+        year: student.year || '',
+        _method: "PUT"
     });
 
     const onSubmit = (e) =>{
         e.preventDefault();
-        post(route('student.store'));
+        post(route('student.update'));
     }
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Add a Student
+                    Edit a Student: {student.name}
                 </h2>
             }
         >

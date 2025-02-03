@@ -1,12 +1,24 @@
 import Pagination from '@/Components/Pagination';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import SelectInput from '@/Components/SelectInput';
 import { STUDENT_SPEC_TEXT_MAP, STUDENT_SPEC_CLASS_MAP } from '@/constants';
+import { useEffect, useState } from 'react';
 
-export default function Index({students, queryParams = null}) {
+export default function Index({students, queryParams = null, success}) {
     queryParams = queryParams || {};
+    const [showSuccess, setShowSuccess] = useState(!!success);
+
+        useEffect(() => {
+        if (success) {
+            const timer = setTimeout(() => {
+                setShowSuccess(false);
+            }, 3000); // Hide after 3 seconds
+
+            return () => clearTimeout(timer);
+        }
+    }, [success]);
 
     const searchFieldName = (field, value) => {
         if(field){
@@ -34,7 +46,7 @@ export default function Index({students, queryParams = null}) {
                     </h2>
                     <Link className='bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded shadow transition-all'
                     href={route('student.create')}>
-                        Add Project
+                        Add Student
                     </Link>
                 </div>
 
@@ -44,6 +56,9 @@ export default function Index({students, queryParams = null}) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    {showSuccess && (<div className='bg-emerald-500 py-2 px-4 mb-4 text-white rounded'>
+                        {success}
+                    </div>)}
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -111,8 +126,8 @@ export default function Index({students, queryParams = null}) {
                                             </td>
                                             <td className="p-3 text-right">
                                                 <a
-                                                    href={route('student.show', student.id)}
-                                                    className="text-indigo-600 hover:text-indigo-900"
+                                                    href={route('student.edit', student.id)}
+                                                    className="bg-yellow-600 p-1 hover:bg-yellow-400 transition-all shadow rounded-lg text-gray-800 hover:text-gray-900"
                                                 >View</a>
                                             </td>
                                         </tr>

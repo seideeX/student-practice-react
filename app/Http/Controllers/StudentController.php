@@ -29,7 +29,8 @@ class StudentController extends Controller
 
         return Inertia::render('Student/Index', [
             'students' => StudentResource::collection($students),
-            'queryParams' => request()->query() ?: null
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success')
         ]);
     }
 
@@ -46,7 +47,14 @@ class StudentController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
-        //
+        $data = $request->validated();
+        try{
+            Student::create($data);
+            return to_route('student.index')->with('success', 'Student is Successfully created.');
+        }catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to create student', 'message' => $e->getMessage()], 500);
+        }
+
     }
 
     /**
@@ -62,7 +70,9 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        return Inertia::render('Student/Edit', [
+            'student' => new StudentResource($student)
+        ]);
     }
 
     /**

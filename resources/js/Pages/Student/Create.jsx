@@ -6,7 +6,7 @@ import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Create({}){
+export default function Create({auth}){
     const {data, setData, post, errors} = useForm({
         name: '',
         program: '',

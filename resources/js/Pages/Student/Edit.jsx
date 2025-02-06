@@ -1,12 +1,12 @@
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, Link, router, useForm} from "@inertiajs/react";
 import InputLabel from "@/Components/InputLabel";
 import SelectInput from "@/Components/SelectInput";
 import InputError from "@/Components/InputError";
 
 
-export default function Edit({student}){
+export default function Edit({ auth, student}){
     const {data, setData, post, errors} = useForm({
         name: student.name || '',
         program: student.program || '',
@@ -18,14 +18,14 @@ export default function Edit({student}){
 
     const onSubmit = (e) =>{
         e.preventDefault();
-        post(route('student.update'));
+        post(route('student.update', student.id));
     }
 
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Edit a Student: {student.name}
+                    Edit Student: {student.name}
                 </h2>
             }
         >
@@ -59,6 +59,7 @@ export default function Edit({student}){
                                 id="student-specialization"
                                 name="specialization"
                                 className='block w-full mt-1'
+                                value={data.specialization}
                                 onChange={e => {setData('specialization', e.target.value)}}
                                 >
                                     <option value="">Select Specialization</option>
@@ -92,6 +93,7 @@ export default function Edit({student}){
                                 </Link>
                                 <button className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>Submit</button>
                             </div>
+
                         </form>
                     </div>
                 </div>

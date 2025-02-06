@@ -37,6 +37,20 @@ export default function Index({students, queryParams = null, success}) {
         }
     }
 
+    const deleteProject = (student) => {
+        if (!window.confirm("Are you sure you want to delete this student?")) {
+            return;
+        }
+        router.delete(route('student.destroy', student.id),{
+            onSuccess: (page) => {
+                if (page.props.success) {
+                    setShowSuccess(true);
+                    setTimeout(() => setShowSuccess(false), 3000);
+                }
+            }
+        });
+    };
+
     return (
         <AuthenticatedLayout
             header={
@@ -124,11 +138,13 @@ export default function Index({students, queryParams = null, success}) {
                                             <td className="p-3">
                                                 {student.year}
                                             </td>
-                                            <td className="p-3 text-right">
+                                            <td className="p-3 text-nowrap">
                                                 <a
                                                     href={route('student.edit', student.id)}
-                                                    className="bg-yellow-600 p-1 hover:bg-yellow-400 transition-all shadow rounded-lg text-gray-800 hover:text-gray-900"
+                                                    className="mx-1 bg-yellow-600 p-1 hover:bg-yellow-400 transition-all shadow rounded-lg text-gray-800 hover:text-gray-900"
                                                 >View</a>
+                                                <button onClick={e => deleteProject(student)} className="bg-red-600 p-1 text-white rounded-lg shadow transition-all hover:bg-red-700">Delete</button>
+
                                             </td>
                                         </tr>
                                     ))}

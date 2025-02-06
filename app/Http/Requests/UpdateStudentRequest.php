@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateStudentRequest extends FormRequest
@@ -11,7 +12,7 @@ class UpdateStudentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,11 @@ class UpdateStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'max:255'],
+            'year' => ['required', 'integer'],
+            'program' => ['required', 'string'],
+            'address' => ['required', 'string'],
+            'specialization' => ['required', Rule::in(['wmad', 'ns'])]
         ];
     }
 }

@@ -21,6 +21,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
             'password' => bcrypt('admin123'),
         ]);
-        Student::factory(50)->create();
+        Student::factory(100)->create();
     }
 }

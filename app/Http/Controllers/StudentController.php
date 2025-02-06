@@ -80,7 +80,13 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, Student $student)
     {
-        //
+        $data = $request->validated();
+        try{
+            $student->update($data);
+            return to_route('student.index')->with('success', 'Student is updated successfully.');
+        }catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to create student', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -88,6 +94,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+        return to_route('student.index')->with('success', 'Student is deleted successfully.');
     }
 }

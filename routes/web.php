@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -20,7 +21,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::resource('student', StudentController::class);
-
+    Route::resource("employee", EmployeeController::class);
 });
 
 Route::get('/dashboard', function () {

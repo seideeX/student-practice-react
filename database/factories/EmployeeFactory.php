@@ -18,9 +18,9 @@ class EmployeeFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'rank' => $this->faker->randomElement(["Instructor", "Associate Professor", "Assistant Professor", "Porfessor"]),
+            'rank' => $this->faker->randomElement(["Instructor", "Associate Professor", "Assistant Professor", "Professor"]),
             "department" => $this->faker->randomElement(["ICT", "CON", "COED", "DAS"]),
-            "designation" => $this->faker->randomElement(["Faculty", "Admin"]),
+            "designation" => $this->faker->randomElement(["Faculty", "Admin"])
         ];
     }
 }

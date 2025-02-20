@@ -9,4 +9,10 @@ class Employee extends Model
 {
     /** @use HasFactory<\Database\Factories\EmployeeFactory> */
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'designation',
+        'rank',
+        'department'
+    ];
 }

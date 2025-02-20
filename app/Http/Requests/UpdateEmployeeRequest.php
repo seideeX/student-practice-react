@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEmployeeRequest extends FormRequest
@@ -11,7 +12,7 @@ class UpdateEmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,10 @@ class UpdateEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'max:255'],
+            'department' => ['required', Rule::in(["ICT", "CON", "COED", "DAS"])],
+            'rank' => ['required', Rule::in(["Instructor", "Associate Professor", "Assistant Professor", "Professor"])],
+            'designation' => ['required', Rule::in(["Faculty", "Admin"])],
         ];
     }
 }

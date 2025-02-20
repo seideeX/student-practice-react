@@ -6,6 +6,7 @@ use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use Exception;
 use Inertia\Inertia;
 
 class EmployeeController extends Controller
@@ -16,8 +17,26 @@ class EmployeeController extends Controller
     public function index()
     {
         $query = Employee::query();
+
+        if (request('name')){
+            $query->where('name', 'like', '%'.request('name').'%');
+        }
+        if(request('department')){
+            $query->where('department', request('department'));
+        }
+        if(request('rank')){
+            $query->where('rank', request('rank'));
+        }
+        if(request('designation')){
+            $query->where('designation', request('designation'));
+        }
+
         $employees = $query->paginate(10)->onEachSide(1);
-        return Inertia::render('Employee/Index', ['employees' =>  EmployeeResource::collection($employees)]);
+        return Inertia::render('Employee/Index', [
+            'employees' =>  EmployeeResource::collection($employees),
+            'queryParams' => request()->query() ?: null,
+            'success' => session('success')
+        ]);
     }
 
     /**
@@ -25,7 +44,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render("Employee/Create");
     }
 
     /**
@@ -33,7 +52,13 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-        //
+        $data = $request->validated();
+        try{
+            Employee::create($data);
+            return to_route('employee.index')->with('success', 'Employee is Successfully created.');
+        }catch (Exception $e) {
+            return response()->json(['error' => 'Failed to create Employee', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -49,7 +74,9 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        dd("wala pa");
+        return Inertia::render("Employee/Edit", [
+            "employee" => new EmployeeResource($employee)
+        ]);
     }
 
     /**
@@ -57,7 +84,13 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        //
+        $data = $request->validated();
+        try{
+            $employee->update($data);
+            return to_route('employee.index')->with('success', 'Employee is updated successfully.');
+        }catch (Exception $e) {
+            return response()->json(['error' => 'Failed to create employee', 'message' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -65,6 +98,7 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        //
+        $employee->delete();
+        return to_route('employee.index')->with('success', 'Employee is deleted successfully.');
     }
 }

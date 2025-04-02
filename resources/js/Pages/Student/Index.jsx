@@ -5,6 +5,7 @@ import TextInput from '@/Components/TextInput';
 import SelectInput from '@/Components/SelectInput';
 import { STUDENT_SPEC_TEXT_MAP, STUDENT_SPEC_CLASS_MAP } from '@/constants';
 import { useEffect, useState } from 'react';
+import TableHeader from '@/Components/TableHeader';
 
 export default function Index({students, queryParams = null, success}) {
     queryParams = queryParams || {};
@@ -35,6 +36,17 @@ export default function Index({students, queryParams = null, success}) {
         }else{
             return;
         }
+    }
+
+    const sortChanged = (name) => {
+        if(queryParams.sortField === name){
+            queryParams.sortDirection = queryParams.sortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            queryParams.sortField = name;
+            queryParams.sortDirection = 'desc';
+        }
+
+        router.get(route('student.index', queryParams));
     }
 
     const deleteProject = (student) => {
@@ -78,11 +90,41 @@ export default function Index({students, queryParams = null, success}) {
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead>
                                     <tr className="text-nowrap">
-                                        <th className="px-3 py-2">ID</th>
-                                        <th className="px-3 py-2">Name</th>
-                                        <th className="px-3 py-2">Program</th>
-                                        <th className="px-3 py-2">Specialization</th>
-                                        <th className="px-3 py-2">Year</th>
+                                        <TableHeader name="id"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            ID
+                                        </TableHeader>
+                                        <TableHeader name="name"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Name
+                                        </TableHeader>
+                                        <TableHeader name="program"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Program
+                                        </TableHeader>
+                                        <TableHeader name="specialization"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Specialization
+                                        </TableHeader>
+                                        <TableHeader name="year"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Year
+                                        </TableHeader>
                                         <th className="px-3 py-2 text-right">Actions</th>
                                     </tr>
                                 </thead>

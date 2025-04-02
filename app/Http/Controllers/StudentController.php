@@ -15,7 +15,11 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $query = Student::query();
+        $query = Student::query(); 
+
+
+        $sortField = request("sortField", "id");
+        $sortDirection = request("sortDirection", "asc");
 
         if(request('name')) {
             $query->where('name', 'like', '%'.request('name').'%');
@@ -25,7 +29,7 @@ class StudentController extends Controller
             $query->where('specialization', request('specialization'));
         }
 
-        $students = $query->paginate(10)->onEachSide(1);
+        $students = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
 
         return Inertia::render('Student/Index', [
             'students' => StudentResource::collection($students),

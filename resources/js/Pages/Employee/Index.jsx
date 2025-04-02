@@ -1,5 +1,6 @@
 import Pagination from '@/Components/Pagination'
 import SelectInput from '@/Components/SelectInput'
+import TableHeader from '@/Components/TableHeader'
 import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { Head, Link, router } from '@inertiajs/react'
@@ -33,6 +34,16 @@ export const Index = ({auth, employees, queryParams = null, success}) => {
         }else{
             return;
         }
+    }
+    const sortChanged = (name) => {
+        if(queryParams.sortField === name){
+            queryParams.sortDirection = queryParams.sortDirection === 'asc' ? 'desc' : 'asc';
+        }else{
+            queryParams.sortField = name;
+            queryParams.sortDirection = 'desc';
+        }
+
+        router.get(route('employee.index', queryParams));
     }
 
     const deleteEmployee = (employee) => {
@@ -74,11 +85,41 @@ export const Index = ({auth, employees, queryParams = null, success}) => {
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead>
                                     <tr className="text-nowrap">
-                                        <th className="px-3 py-2">ID</th>
-                                        <th className="px-3 py-2">Name</th>
-                                        <th className="px-3 py-2">Designation</th>
-                                        <th className="px-3 py-2">Rank</th>
-                                        <th className="px-3 py-2">Department</th>
+                                        <TableHeader name="id"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            ID
+                                        </TableHeader>
+                                        <TableHeader name="name"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Name
+                                        </TableHeader>
+                                        <TableHeader name="designation"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Designation
+                                        </TableHeader>
+                                        <TableHeader name="rank"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Rank
+                                        </TableHeader>
+                                        <TableHeader name="department"
+                                            sortField={queryParams.sortField}
+                                            sortDirection={queryParams.sortDirection}
+                                            sortChanged={sortChanged}
+                                        >
+                                            Department
+                                        </TableHeader>
                                         <th className="px-3 py-2 text-right">Actions</th>
                                     </tr>
                                 </thead>

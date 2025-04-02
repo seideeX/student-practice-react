@@ -18,6 +18,9 @@ class EmployeeController extends Controller
     {
         $query = Employee::query();
 
+        $sortField = request("sortField", "id");
+        $sortDirection = request("sortDirection", "asc");
+
         if (request('name')){
             $query->where('name', 'like', '%'.request('name').'%');
         }
@@ -31,7 +34,7 @@ class EmployeeController extends Controller
             $query->where('designation', request('designation'));
         }
 
-        $employees = $query->paginate(10)->onEachSide(1);
+        $employees = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
         return Inertia::render('Employee/Index', [
             'employees' =>  EmployeeResource::collection($employees),
             'queryParams' => request()->query() ?: null,
